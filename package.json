@@ -1,0 +1,24 @@
+{
+  "name": "bugzz",
+  "version": "1.0.0",
+  "description": "Prototype idea of a Videogame made in Phaser for the Game Off 2021 for itch.io",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shimberly/bugzz.git"
+  },
+  "author": "Kimberly Muñoz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shimberly/bugzz/issues"
+  },
+  "homepage": "https://github.com/Shimberly/bugzz#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

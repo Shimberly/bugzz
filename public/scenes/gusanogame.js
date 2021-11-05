@@ -8,7 +8,7 @@ export class Gusanogame extends Phaser.Scene {
         super({ key: 'gusanogame' });
     }
     init() {
-        this.vidas = 1;
+        this.vidas = 2;
         this.barraEvolucion = 0;
     }
 
@@ -24,12 +24,19 @@ export class Gusanogame extends Phaser.Scene {
             'assets/img/player.png',
             { frameWidth: 32, frameHeight: 48 }
         );
-
+        //AGREGAR SONIDOS
+        this.load.audio('startgamesound', '../assets/sounds/startgame.ogg');
+        this.load.audio('impactsound', '../assets/sounds/impact.ogg');
+        this.load.audio('catchsound', '../assets/sounds/catch.ogg');
     }
 
     create() {
         this.add.image(0, 0, 'fondo').setOrigin(0, 0);
-
+        //SONIDO
+        this.startGameSample = this.sound.add('startgamesound');
+        this.impactSample = this.sound.add('impactsound');
+        this.catchSample = this.sound.add('catchsound');
+        this.startGameSample.play();
         //JUGADOR
         player = this.physics.add.sprite(100, 450, 'player');
         player.setBounce(0.2);
@@ -115,7 +122,8 @@ export class Gusanogame extends Phaser.Scene {
 
     collectStar(player, star) {
         star.disableBody(true, true);
-        this.barraEvolucion += 10;
+        this.catchSample.play();
+        this.barraEvolucion += 5;
         barraText.setText('Evolucion: ' + this.barraEvolucion); //ACTUALIZA BARRA EVOLUCION
         if (this.barraEvolucion === 100) {
             this.endGame(true);
@@ -135,6 +143,7 @@ export class Gusanogame extends Phaser.Scene {
     hitbomb(player, bomb) {
 
         this.vidas--;
+        this.impactSample.play();
         bomb.disableBody(true, true);
         vidaText.setText('Vidas: ' + this.vidas);
         if (this.vidas === 0) {

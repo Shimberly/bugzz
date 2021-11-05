@@ -1,30 +1,28 @@
-let cursors, player, stars, bombs;
-let disparos;
-let barraEvolucion, vidas;
-let barraText, vidaText;
+import { LiveCounter } from "../components/livecounter.js";
 
-export class Gusanogame extends Phaser.Scene {
+export class FirstPhase extends Phaser.Scene {
     constructor() {
-        super({ key: 'gusanogame' });
+        super({ key: 'firstphase' });
     }
     init() {
-        this.vidas = 2;
-        this.barraEvolucion = 0;
+        this.scoreEvolution = 0;
+        this.liveCounter = new LiveCounter(this, 3);
     }
 
     preload() {
         //this.load.setBaseURL('http://labs.phaser.io');
 
-        //AGREGAR IMAGENES
+        //ADD IMG
         this.load.image('fondo', 'assets/img/fondo.jpg');
         this.load.image('star', 'assets/img/star.png');
         this.load.image('bomb', 'assets/img/bomb.png');
+        this.load.image('heart', 'assets/img/life.png');
         //this.load.spritesheet('fullscreen', 'assets/ui/fullscreen.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('player',
             'assets/img/player.png',
             { frameWidth: 32, frameHeight: 48 }
         );
-        //AGREGAR SONIDOS
+        //ADD SOUNDS
         this.load.audio('startgamesound', '../assets/sounds/startgame.ogg');
         this.load.audio('impactsound', '../assets/sounds/impact.ogg');
         this.load.audio('catchsound', '../assets/sounds/catch.ogg');
@@ -38,9 +36,9 @@ export class Gusanogame extends Phaser.Scene {
         this.catchSample = this.sound.add('catchsound');
         this.startGameSample.play();
         //JUGADOR
-        player = this.physics.add.sprite(100, 450, 'player');
-        player.setBounce(0.2);
-        player.setCollideWorldBounds(true);
+        this.player = this.physics.add.sprite(100, 450, 'player');
+        this.player.setBounce(0.2);
+        this.player.setCollideWorldBounds(true);
 
         this.anims.create({
             key: 'left',
@@ -63,31 +61,32 @@ export class Gusanogame extends Phaser.Scene {
         });
 
         //TECLAS
-        cursors = this.input.keyboard.createCursorKeys();
+        this.cursors = this.input.keyboard.createCursorKeys();
 
         //ESTRELLAS
-        stars = this.physics.add.group({
+        this.stars = this.physics.add.group({
             key: 'star',
             repeat: 3,
             setXY: { x: 12, y: 10, stepX: 50, stepY: 30 }
         });
-        stars.children.iterate(function (child) {
+        this.stars.children.iterate(function (child) {
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
             child.setCollideWorldBounds(true);
         })
-        this.physics.add.overlap(player, stars, this.collectStar, null, this);
+        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
 
         //TEXTOS
-        barraText = this.add.text(16, 16, 'Evolucion:0', { fontSize: '32px', fill: '#000' });
-        vidaText = this.add.text(300, 16, 'Vidas: ' + this.vidas, { fontSize: '32px', fill: '#000' });
+        this.barraText = this.add.text(16, 16, 'Evolucion: ' + this.scoreEvolution, { fontSize: '32px', fill: '#000' });
+        //this.vidaText = this.add.text(300, 16, 'Vidas: ' + this.lifes, { fontSize: '32px', fill: '#000' });
+        this.liveCounter.create();
 
         //BOMBAS
-        bombs = this.physics.add.group();
+        this.bombs = this.physics.add.group();
 
-        this.physics.add.collider(player, bombs, this.hitbomb, null, this);
+        this.physics.add.collider(this.player, this.bombs, this.hitbomb, null, this);
 
         //DISPAROS
-        disparos = this.physics.add.group({
+        this.disparos = this.physics.add.group({
             key: 'bomb'
             //maxSize: 100,
         });
@@ -123,18 +122,18 @@ export class Gusanogame extends Phaser.Scene {
     collectStar(player, star) {
         star.disableBody(true, true);
         this.catchSample.play();
-        this.barraEvolucion += 5;
-        barraText.setText('Evolucion: ' + this.barraEvolucion); //ACTUALIZA BARRA EVOLUCION
-        if (this.barraEvolucion === 100) {
+        this.scoreEvolution += 5;
+        this.barraText.setText('Evolucion: ' + this.scoreEvolution); //ACTUALIZA BARRA EVOLUCION
+        if (this.scoreEvolution === 100) {
             this.endGame(true);
         }
 
-        if (stars.countActive(true) === 0) {
-            stars.children.iterate(function (child) {
+        if (this.stars.countActive(true) === 0) {
+            this.stars.children.iterate(function (child) {
                 child.enableBody(true, child.x, child.y, true, true); //ACTIVA ESTRELLAS DE NUEVO
             });
             var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400); //CREAR NUMERO RANDOM
-            var bomb = bombs.create(x, 16, 'bomb');
+            var bomb = this.bombs.create(x, 16, 'bomb');
             bomb.setBounce(1);
             bomb.setCollideWorldBounds(true);
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
@@ -142,16 +141,20 @@ export class Gusanogame extends Phaser.Scene {
     }
     hitbomb(player, bomb) {
 
-        this.vidas--;
+        this.lifes--;
         this.impactSample.play();
         bomb.disableBody(true, true);
-        vidaText.setText('Vidas: ' + this.vidas);
-        if (this.vidas === 0) {
+        let gameNotFinished = this.liveCounter.liveLost();
+        if (!gameNotFinished) {
+            //this.setInitialPlatformState();
+        }
+        /*this.vidaText.setText('Vidas: ' + this.lifes);
+        if (this.lifes === 0) {
             /*this.physics.pause();
             player.setTint(0xff0000);
-            player.anims.play('turn');*/
+            player.anims.play('turn');
             this.endGame();
-        }
+        }*/
 
     }
     disparar(player) {
@@ -166,44 +169,44 @@ export class Gusanogame extends Phaser.Scene {
     }
     movTeclas() { //ACCIONES DEL TECLADO
         let playerVelocity = 160;
-        if (cursors.up.isDown && cursors.right.isDown) {
-            player.setVelocityY(-playerVelocity);
-            player.setVelocityX(playerVelocity);
-            player.anims.play('right', true);
+        if (this.cursors.up.isDown && this.cursors.right.isDown) {
+            this.player.setVelocityY(-playerVelocity);
+            this.player.setVelocityX(playerVelocity);
+            this.player.anims.play('right', true);
         }
-        if (cursors.down.isDown && cursors.right.isDown) {
-            player.setVelocityY(playerVelocity);
-            player.setVelocityX(playerVelocity);
-            player.anims.play('right', true);
+        if (this.cursors.down.isDown && this.cursors.right.isDown) {
+            this.player.setVelocityY(playerVelocity);
+            this.player.setVelocityX(playerVelocity);
+            this.player.anims.play('right', true);
         }
-        if (cursors.up.isDown && cursors.left.isDown) {
-            player.setVelocityY(-playerVelocity);
-            player.setVelocityX(-playerVelocity);
-            player.anims.play('left', true);
+        if (this.cursors.up.isDown && this.cursors.left.isDown) {
+            this.player.setVelocityY(-playerVelocity);
+            this.player.setVelocityX(-playerVelocity);
+            this.player.anims.play('left', true);
         }
-        if (cursors.down.isDown && cursors.left.isDown) {
-            player.setVelocityY(playerVelocity);
-            player.setVelocityX(-playerVelocity);
-            player.anims.play('left', true);
+        if (this.cursors.down.isDown && this.cursors.left.isDown) {
+            this.player.setVelocityY(playerVelocity);
+            this.player.setVelocityX(-playerVelocity);
+            this.player.anims.play('left', true);
         }
-        else if (cursors.left.isDown) {
-            player.setVelocityX(-playerVelocity);
-            player.anims.play('left', true);
+        else if (this.cursors.left.isDown) {
+            this.player.setVelocityX(-playerVelocity);
+            this.player.anims.play('left', true);
         }
-        else if (cursors.right.isDown) {
-            player.setVelocityX(playerVelocity);
-            player.anims.play('right', true);
+        else if (this.cursors.right.isDown) {
+            this.player.setVelocityX(playerVelocity);
+            this.player.anims.play('right', true);
         }
-        else if (cursors.up.isDown) {
-            player.setVelocityY(-playerVelocity);
+        else if (this.cursors.up.isDown) {
+            this.player.setVelocityY(-playerVelocity);
         }
-        else if (cursors.down.isDown) {
-            player.setVelocityY(playerVelocity);
+        else if (this.cursors.down.isDown) {
+            this.player.setVelocityY(playerVelocity);
         }
         else {
-            player.setVelocityX(0);
-            player.setVelocityY(0);
-            player.anims.play('turn');
+            this.player.setVelocityX(0);
+            this.player.setVelocityY(0);
+            this.player.anims.play('turn');
         }
 
     }

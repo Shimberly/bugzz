@@ -7,14 +7,14 @@ export class Gamewin extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('fondo', '../assets/img/fondo.jpg');
+        this.load.image('background', '../assets/img/fondo.jpg');
         this.restartButton.preload();
 
         this.load.audio('gamewinsound', '../assets/sounds/gamewin.ogg');
     }
 
     create() {
-        this.add.image(410, 250, 'fondo');
+        this.add.image(410, 250, 'background');
         this.restartButton.create();
         //this.congratsImage = this.add.image(400, 90, 'gamewin');
         this.add.text(100, 90, 'WII GANASTE :3', { fontSize: '60px', fill: '#fff' });

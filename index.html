@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta author="Kimberly Muñoz Cepeda">
     <title>Buggzz</title>
 
     <style type="text/css">
@@ -18,8 +19,8 @@
 <body>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.24.0/dist/phaser.min.js"></script>
     <script type="module">
-        import { Gusanogame } from './scenes/gusanogame.js';
-        import { Escarabajogame } from './scenes/escarabajogame.js';
+        import { FirstPhase } from './scenes/firstphase.js';
+        import { SecondPhase } from './scenes/secondphase.js';
         import { Gameover } from './scenes/gameover.js';
         import { Gamewin } from './scenes/gamewin.js';
         import { Boss } from './scenes/boss.js';
@@ -41,7 +42,7 @@
                     debug: false
                 }
             },
-            scene: [Gusanogame, Escarabajogame, Boss, Gameover, Gamewin]
+            scene: [FirstPhase, SecondPhase, Boss, Gameover, Gamewin]
         };
 
         let game = new Phaser.Game(config);

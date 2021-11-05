@@ -26,7 +26,7 @@
                 default: 'arcade',
                 arcade: {
                     fps: 60,
-                    gravity: { y: 300 }
+                    gravity: { y: 0 } //300
                 }
             },
             scene: {
@@ -38,14 +38,19 @@
 
         //game.scene.add('GameScene', GameScene);
         //game.scene.add('TitleScene', PreloadScene);
-        var cursors, player;
-
+        var cursors, player, stars, bombs;
+        var score = 0;
+        var scoreText;
+        var gameOver = false;
         var game = new Phaser.Game(config);
 
         function preload() {
             //this.load.setBaseURL('http://labs.phaser.io');
 
+            //AGREGAR IMAGENES
             this.load.image('fondo', 'assets/img/fondo.jpg');
+            this.load.image('star', 'assets/img/star.png');
+            this.load.image('bomb', 'assets/img/bomb.png');
             this.load.spritesheet('player',
                 'assets/img/player.png',
                 { frameWidth: 32, frameHeight: 48 }
@@ -69,7 +74,7 @@
 
             this.anims.create({
                 key: 'turn',
-                frames: [{ key: 'dude', frame: 4 }],
+                frames: [{ key: 'player', frame: 4 }],
                 frameRate: 20
             });
 
@@ -79,7 +84,29 @@
                 frameRate: 10,
                 repeat: -1
             });
+
+            //TECLAS
             cursors = this.input.keyboard.createCursorKeys();
+
+            //ESTRELLAS
+            stars = this.physics.add.group({
+                key: 'star',
+                repeat: 8,
+                setXY: { x: 12, y: 10, stepX: 50, stepY: 30 }
+            });
+            stars.children.iterate(function (child) {
+                child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+                child.setCollideWorldBounds(true);
+            })
+            this.physics.add.overlap(player, stars, collectStar, null, this);
+
+            //TEXTO SCORE
+            scoreText = this.add.text(16, 16, 'score:0', { fontSize: '32px', fill: '#000' });
+
+            //BOMBAS
+            bombs = this.physics.add.group();
+
+            this.physics.add.collider(player, bombs, hitbomb, null, this);
         }
         function update() {
 
@@ -93,15 +120,39 @@
 
                 player.anims.play('right', true);
             }
+            else if (cursors.up.isDown) {
+                player.setVelocityY(-160);
+            }
+            else if (cursors.down.isDown) {
+                player.setVelocityY(160);
+            }
             else {
                 player.setVelocityX(0);
-
-                //player.anims.play('turn');
+                player.setVelocityY(0);
+                player.anims.play('turn');
             }
+        }
+        function collectStar(player, star) {
+            star.disableBody(true, true);
+            score += 10;
+            scoreText.setText('Score: ' + score); //ACTUALIZA SCORE
 
-            if (cursors.up.isDown && player.body.touching.down) {
-                player.setVelocityY(-330);
+            if (stars.countActive(true) === 0) {
+                stars.children.iterate(function (child) {
+                    child.enableBody(true, child.x, child.y, true, true); //ACTIVA ESTRELLAS DE NUEVO
+                });
+                var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400); //CREAR NUMERO RANDOM
+                var bomb = bombs.create(x, 16, 'bomb');
+                bomb.setBounce(1);
+                bomb.setCollideWorldBounds(true);
+                bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
             }
+        }
+        function hitbomb(player, bomb) {
+            this.physics.pause();
+            player.setTint(0xff0000);
+            player.anims.play('turn');
+            gameOver = true;
         }
     </script>
 

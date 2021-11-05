@@ -2,7 +2,8 @@ import express from 'express';
 import Path from 'path';
 
 const app = express()
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 3000; //Puerto dinamico para Heroku
+
 //app.use(express.static(Path.resolve('/')));
 
 app.use(express.static('public')); //hace que puedas acceder desde el index a rutas estaticas :(

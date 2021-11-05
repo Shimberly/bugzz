@@ -20,12 +20,12 @@ var config = {
 
 //game.scene.add('GameScene', GameScene);
 //game.scene.add('TitleScene', PreloadScene);
-var cursors, player, stars, bombs;
-var disparos;
-var score = 0;
-var scoreText;
-var gameOver = false;
-var game = new Phaser.Game(config);
+let cursors, player, stars, bombs;
+let disparos;
+let barraEvolucion, vidas;
+let barraText, vidaText;
+let gameOver = false;
+let game = new Phaser.Game(config);
 
 function preload() {
     //this.load.setBaseURL('http://labs.phaser.io');
@@ -38,9 +38,12 @@ function preload() {
         'assets/img/player.png',
         { frameWidth: 32, frameHeight: 48 }
     );
+
 }
 
 function create() {
+    barraEvolucion = 0;
+    vidas = 3;
     this.add.image(0, 0, 'fondo').setOrigin(0, 0);
 
     //JUGADOR
@@ -83,8 +86,9 @@ function create() {
     })
     this.physics.add.overlap(player, stars, collectStar, null, this);
 
-    //TEXTO SCORE
-    scoreText = this.add.text(16, 16, 'score:0', { fontSize: '32px', fill: '#000' });
+    //TEXTOS
+    barraText = this.add.text(16, 16, 'Evolucion:0', { fontSize: '32px', fill: '#000' });
+    vidaText = this.add.text(300, 16, 'Vidas:3', { fontSize: '32px', fill: '#000' });
 
     //BOMBAS
     bombs = this.physics.add.group();
@@ -93,7 +97,7 @@ function create() {
 
     //DISPAROS
     disparos = this.physics.add.group({
-        key: 'bomb',
+        key: 'bomb'
         //maxSize: 100,
     });
 }
@@ -108,8 +112,14 @@ function update() {
 }
 function collectStar(player, star) {
     star.disableBody(true, true);
-    score += 10;
-    scoreText.setText('Score: ' + score); //ACTUALIZA SCORE
+    barraEvolucion += 1;
+    barraText.setText('Evolucion: ' + barraEvolucion); //ACTUALIZA BARRA EVOLUCION
+    if (barraEvolucion === 100) {
+        this.physics.pause();
+        player.setTint(0x008000);
+        player.anims.play('turn');
+        gameOver = true;
+    }
 
     if (stars.countActive(true) === 0) {
         stars.children.iterate(function (child) {
@@ -123,10 +133,17 @@ function collectStar(player, star) {
     }
 }
 function hitbomb(player, bomb) {
-    this.physics.pause();
-    player.setTint(0xff0000);
-    player.anims.play('turn');
-    gameOver = true;
+
+    vidas--;
+    bomb.disableBody(true, true);
+    vidaText.setText('Vidas: ' + vidas);
+    if (vidas === 0) {
+        this.physics.pause();
+        player.setTint(0xff0000);
+        player.anims.play('turn');
+        gameOver = true;
+    }
+
 }
 function disparar(player) {
     let bullet = this.disparos.get(player.x + 17, player.y - 30);

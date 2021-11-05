@@ -9,6 +9,7 @@
 
     <style type="text/css">
         body {
+            background-color: black;
             margin: 0;
         }
     </style>
@@ -16,7 +17,36 @@
 
 <body>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.24.0/dist/phaser.min.js"></script>
-    <script type="module" src="game.js"></script>
+    <script type="module">
+        import { Gusanogame } from './scenes/gusanogame.js';
+        import { Escarabajogame } from './scenes/escarabajogame.js';
+        import { Gameover } from './scenes/gameover.js';
+        import { Gamewin } from './scenes/gamewin.js';
+        import { Boss } from './scenes/boss.js';
+        var config = {
+            type: Phaser.AUTO,
+            backgroundColor: '#ffffff',
+            scale: {
+                parent: 'phaser-example',
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 800,
+                height: 600
+            },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    fps: 60,
+                    gravity: { y: 0 }, //300
+                    debug: false
+                }
+            },
+            scene: [Gusanogame, Escarabajogame, Boss, Gameover, Gamewin]
+        };
+
+        let game = new Phaser.Game(config);
+
+    </script>
 
 </body>
 

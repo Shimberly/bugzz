@@ -1,4 +1,5 @@
 import { LiveCounter } from "../components/livecounter.js";
+import { FoodCounter } from "../components/foodcounter.js";
 
 export class FirstPhase extends Phaser.Scene {
     constructor() {
@@ -7,6 +8,7 @@ export class FirstPhase extends Phaser.Scene {
     init() {
         this.scoreEvolution = 0;
         this.liveCounter = new LiveCounter(this, 3);
+        this.foodCounter = new FoodCounter(this);
     }
 
     preload() {
@@ -32,8 +34,7 @@ export class FirstPhase extends Phaser.Scene {
 
         this.background = this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'background');
         this.background.setScale(0.2, 0.2);
-        this.food2 = this.add.image(200, 200, 'food2');
-        this.food2.setScale(0.5, 0.5);
+
         //SONIDO
         this.startGameSample = this.sound.add('startgamesound');
         this.impactSample = this.sound.add('impactsound');
@@ -52,23 +53,12 @@ export class FirstPhase extends Phaser.Scene {
         //TECLAS
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        //ESTRELLAS
-        this.foods = this.physics.add.group({
-            key: 'food',
-            repeat: 3,
-            setXY: { x: 12, y: 10, stepX: 50, stepY: 30 }
-        });
-        this.foods.children.iterate(function (child) {
-            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-            child.setCollideWorldBounds(true);
-            child.setScale(0.5, 0.5);
-        })
-        this.physics.add.overlap(this.player, this.foods, this.collectFood, null, this);
+
 
         //TEXTOS
         this.barraText = this.add.text(16, 16, 'Evolucion: ' + this.scoreEvolution, { fontSize: '32px', fill: '#000' });
         this.liveCounter.create();
-
+        this.foodCounter.create(); //CREATE FOOD RANDOM
         //BOMBAS
         this.bombs = this.physics.add.group();
 
@@ -91,26 +81,7 @@ export class FirstPhase extends Phaser.Scene {
         }
     }
 
-    collectFood(player, food) {
-        food.disableBody(true, true);
-        this.catchSample.play();
-        this.scoreEvolution += 5;
-        this.barraText.setText('Evolucion: ' + this.scoreEvolution); //ACTUALIZA BARRA EVOLUCION
-        if (this.scoreEvolution === 100) {
-            this.endGame(true);
-        }
 
-        if (this.foods.countActive(true) === 0) {
-            this.foods.children.iterate(function (child) {
-                child.enableBody(true, child.x, child.y, true, true); //ACTIVA COMIDA DE NUEVO
-            });
-            var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400); //CREAR NUMERO RANDOM
-            var bomb = this.bombs.create(x, 16, 'bomb');
-            bomb.setBounce(1);
-            bomb.setCollideWorldBounds(true);
-            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-        }
-    }
     hitbomb(player, bomb) {
         this.lifes--;
         this.impactSample.play();
@@ -191,4 +162,6 @@ export class FirstPhase extends Phaser.Scene {
             this.scene.start('gamewin');
         }
     }
+
+
 }

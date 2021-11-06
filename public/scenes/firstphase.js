@@ -10,17 +10,16 @@ export class FirstPhase extends Phaser.Scene {
     }
 
     preload() {
-        //this.load.setBaseURL('http://labs.phaser.io');
-
         //ADD IMG
-        this.load.image('fondo', 'assets/img/fondo.jpg');
-        this.load.image('star', 'assets/img/star.png');
+        this.load.image('background', 'assets/img/fondo.jpg');
         this.load.image('bomb', 'assets/img/bomb.png');
-        this.load.image('heart', 'assets/img/life.png');
+        this.load.image('life', 'assets/img/life.png');
+        this.load.image('food', 'assets/img/food.png');
+        this.load.image('food2', 'assets/img/food2.png');
         //this.load.spritesheet('fullscreen', 'assets/ui/fullscreen.png', { frameWidth: 64, frameHeight: 64 });
-        this.load.spritesheet('player',
-            'assets/img/player.png',
-            { frameWidth: 32, frameHeight: 48 }
+        this.load.spritesheet('babyplayer',
+            'assets/img/babyplayer.png',
+            { frameWidth: 75, frameHeight: 30 }
         );
         //ADD SOUNDS
         this.load.audio('startgamesound', '../assets/sounds/startgame.ogg');
@@ -29,55 +28,45 @@ export class FirstPhase extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(0, 0, 'fondo').setOrigin(0, 0);
+        //this.add.image(0, 0, 'fondo').setOrigin(0, 0);
+
+        this.background = this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'background');
+        this.background.setScale(0.2, 0.2);
+        this.food2 = this.add.image(200, 200, 'food2');
+        this.food2.setScale(0.5, 0.5);
         //SONIDO
         this.startGameSample = this.sound.add('startgamesound');
         this.impactSample = this.sound.add('impactsound');
         this.catchSample = this.sound.add('catchsound');
         this.startGameSample.play();
         //JUGADOR
-        this.player = this.physics.add.sprite(100, 450, 'player');
+        this.player = this.physics.add.sprite(100, 450, 'babyplayer');
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
 
         this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
+            key: 'move',
+            frames: this.anims.generateFrameNumbers('babyplayer', { start: 0, end: 3 }),
+            frameRate: 7
         });
-
-        this.anims.create({
-            key: 'turn',
-            frames: [{ key: 'player', frame: 4 }],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('player', { start: 5, end: 8 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
         //TECLAS
         this.cursors = this.input.keyboard.createCursorKeys();
 
         //ESTRELLAS
-        this.stars = this.physics.add.group({
-            key: 'star',
+        this.foods = this.physics.add.group({
+            key: 'food',
             repeat: 3,
             setXY: { x: 12, y: 10, stepX: 50, stepY: 30 }
         });
-        this.stars.children.iterate(function (child) {
+        this.foods.children.iterate(function (child) {
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
             child.setCollideWorldBounds(true);
+            child.setScale(0.5, 0.5);
         })
-        this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+        this.physics.add.overlap(this.player, this.foods, this.collectFood, null, this);
 
         //TEXTOS
         this.barraText = this.add.text(16, 16, 'Evolucion: ' + this.scoreEvolution, { fontSize: '32px', fill: '#000' });
-        //this.vidaText = this.add.text(300, 16, 'Vidas: ' + this.lifes, { fontSize: '32px', fill: '#000' });
         this.liveCounter.create();
 
         //BOMBAS
@@ -91,22 +80,6 @@ export class FirstPhase extends Phaser.Scene {
             //maxSize: 100,
         });
 
-        //PANTALLA COMPLETA
-        /*var button = this.add.image(800 - 16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
-    
-        button.on('pointerup', function () {
-    
-            if (this.scale.isFullscreen) {
-                button.setFrame(0);
-    
-                this.scale.stopFullscreen();
-            }
-            else {
-                button.setFrame(1);
-    
-                this.scale.startFullscreen();
-            }
-        }, this);*/
     }
     update() {
         this.movTeclas();
@@ -118,9 +91,8 @@ export class FirstPhase extends Phaser.Scene {
         }
     }
 
-
-    collectStar(player, star) {
-        star.disableBody(true, true);
+    collectFood(player, food) {
+        food.disableBody(true, true);
         this.catchSample.play();
         this.scoreEvolution += 5;
         this.barraText.setText('Evolucion: ' + this.scoreEvolution); //ACTUALIZA BARRA EVOLUCION
@@ -128,9 +100,9 @@ export class FirstPhase extends Phaser.Scene {
             this.endGame(true);
         }
 
-        if (this.stars.countActive(true) === 0) {
-            this.stars.children.iterate(function (child) {
-                child.enableBody(true, child.x, child.y, true, true); //ACTIVA ESTRELLAS DE NUEVO
+        if (this.foods.countActive(true) === 0) {
+            this.foods.children.iterate(function (child) {
+                child.enableBody(true, child.x, child.y, true, true); //ACTIVA COMIDA DE NUEVO
             });
             var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400); //CREAR NUMERO RANDOM
             var bomb = this.bombs.create(x, 16, 'bomb');
@@ -140,20 +112,12 @@ export class FirstPhase extends Phaser.Scene {
         }
     }
     hitbomb(player, bomb) {
-
         this.lifes--;
         this.impactSample.play();
         bomb.disableBody(true, true);
         let gameNotFinished = this.liveCounter.liveLost();
-        if (!gameNotFinished) {
+        /*if (!gameNotFinished) {
             //this.setInitialPlatformState();
-        }
-        /*this.vidaText.setText('Vidas: ' + this.lifes);
-        if (this.lifes === 0) {
-            /*this.physics.pause();
-            player.setTint(0xff0000);
-            player.anims.play('turn');
-            this.endGame();
         }*/
 
     }
@@ -172,41 +136,50 @@ export class FirstPhase extends Phaser.Scene {
         if (this.cursors.up.isDown && this.cursors.right.isDown) {
             this.player.setVelocityY(-playerVelocity);
             this.player.setVelocityX(playerVelocity);
-            this.player.anims.play('right', true);
+            this.player.anims.play('move', true);
+            this.player.flipX = true; //(Girar la sprite horizontalmente)
         }
         if (this.cursors.down.isDown && this.cursors.right.isDown) {
             this.player.setVelocityY(playerVelocity);
             this.player.setVelocityX(playerVelocity);
-            this.player.anims.play('right', true);
+            this.player.anims.play('move', true);
+            this.player.flipX = true; //(Girar la sprite horizontalmente)
         }
         if (this.cursors.up.isDown && this.cursors.left.isDown) {
             this.player.setVelocityY(-playerVelocity);
             this.player.setVelocityX(-playerVelocity);
-            this.player.anims.play('left', true);
+            this.player.anims.play('move', true);
+            this.player.flipX = false; //(Girar la sprite horizontalmente)
         }
         if (this.cursors.down.isDown && this.cursors.left.isDown) {
             this.player.setVelocityY(playerVelocity);
             this.player.setVelocityX(-playerVelocity);
-            this.player.anims.play('left', true);
+            this.player.anims.play('move', true);
+            this.player.flipX = false; //(Girar la sprite horizontalmente)
+
         }
         else if (this.cursors.left.isDown) {
             this.player.setVelocityX(-playerVelocity);
-            this.player.anims.play('left', true);
+            this.player.anims.play('move', true);
+            this.player.flipX = false; //(Girar la sprite horizontalmente)
         }
         else if (this.cursors.right.isDown) {
             this.player.setVelocityX(playerVelocity);
-            this.player.anims.play('right', true);
+            this.player.anims.play('move', true);
+            this.player.flipX = true; //(Girar la sprite horizontalmente)
         }
         else if (this.cursors.up.isDown) {
             this.player.setVelocityY(-playerVelocity);
+            this.player.anims.play('move', true);
         }
         else if (this.cursors.down.isDown) {
             this.player.setVelocityY(playerVelocity);
+            this.player.anims.play('move', true);
         }
         else {
             this.player.setVelocityX(0);
             this.player.setVelocityY(0);
-            this.player.anims.play('turn');
+            this.player.anims.stop();
         }
 
     }
@@ -219,14 +192,3 @@ export class FirstPhase extends Phaser.Scene {
         }
     }
 }
-//this.doggy50.setOrigin(0,0);  CAMBIAR POSICION
-/*this.doggy50.flipX = true; (Girar la sprite horizontalmente).
-this.doggy50.flipY = true; (Girar la sprite verticalmente).
-this.doggy50.setVisible(0); (0, ocultar sprite, 1 mostrar sprite).
-this.doggy50.setScale(scalaX,scalaY);(Escalar sprite)
-this.doggy50.setAlpha(1); (Transparencia)
-this.doggy50.setTint(color en hexadecimal); (solo funciona con WebGL)
-this.doggy50.x = numero; (Posición en la escena)
-this.doggy50.y = numero; (Posición en la escena)
-this.doggy50.angle = 0; (Giro del sprite en grados).
-this.doggy50.setDepth(0); (Profundidad de los sprites, de 0 en adelante).*/

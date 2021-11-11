@@ -39,13 +39,3 @@ export class FoodCounter {
         }
     }
 }
-
-
-/*
-this.scene.foods.children.iterate(function (child) {
-
-    child.x = leafPosX;
-    child.y = leafPosY;
-    child.setCollideWorldBounds(true);
-    child.setScale(0.5, 0.5);
-})*/

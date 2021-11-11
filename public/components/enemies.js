@@ -5,22 +5,26 @@ export class Enemies {
     }
 
     create() {
-        this.scene.bombs = this.scene.physics.add.group();
-        this.scene.physics.add.collider(this.scene.player, this.scene.bombs, this.hitbomb, null, this);
+        this.scene.spiders = this.scene.physics.add.group();
+        //this.scene.spiders.play('moveSpider', true);
+        //this.scene.spiders.anims.play('moveSpider', true);
+        this.scene.physics.add.collider(this.scene.player, this.scene.spiders, this.hitEnemy, null, this);
         for (let index = 0; index < this.cantEnemies; index++) {
-            var x = (this.scene.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400); //CREAR NUMERO RANDOM
-            var y = (this.scene.player.y < 400) ? Phaser.Math.Between(300, 600) : Phaser.Math.Between(0, 300); //CREAR NUMERO RANDOM
-            var bomb = this.scene.bombs.create(x, y, 'bomb');
-            bomb.setBounce(1);
-            bomb.setCollideWorldBounds(true);
-            bomb.setVelocity(Phaser.Math.Between(100, 300), Phaser.Math.Between(100, 300));
+            var x = Phaser.Math.Between(300, 790)
+            var y = Phaser.Math.Between(0, 590);
+            var spider = this.scene.spiders.create(x, y, 'spider');
+            spider.anims.play('moveSpider', true);
+            spider.setBounce(1);
+            spider.setCollideWorldBounds(true);
+            spider.setVelocity(Phaser.Math.Between(100, 300), Phaser.Math.Between(100, 300));
+            spider.setScale(0.8, 0.8);
         }
 
     }
 
-    hitbomb(player, bomb) {
+    hitEnemy(player, spider) {
         this.scene.impactSample.play();
-        bomb.disableBody(true, true);
+        spider.disableBody(true, true);
         let gameNotFinished = this.scene.liveCounter.liveLost();
         /*if (!gameNotFinished) {
             //this.setInitialPlatformState();

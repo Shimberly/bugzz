@@ -10,13 +10,12 @@ export class FirstPhase extends Phaser.Scene {
         this.scoreEvolution = 0;
         this.liveCounter = new LiveCounter(this, 3);
         this.foodCounter = new FoodCounter(this);
-        this.enemies = new Enemies(this, 10);
+        this.enemies = new Enemies(this, 9);
     }
 
     preload() {
         //ADD IMG
         this.load.image('background', 'assets/img/fondo.jpg');
-        this.load.image('bomb', 'assets/img/bomb.png');
         this.load.image('life', 'assets/img/life.png');
         this.load.image('food', 'assets/img/food.png');
         this.load.image('food2', 'assets/img/food2.png');
@@ -25,9 +24,17 @@ export class FirstPhase extends Phaser.Scene {
             'assets/img/evolution.png',
             { frameWidth: 150, frameHeight: 25 }
         );
+        this.load.spritesheet('spider',
+            'assets/img/spider.png',
+            { frameWidth: 60, frameHeight: 65 }
+        );
         this.load.spritesheet('babyplayer',
             'assets/img/babyplayer.png',
-            { frameWidth: 75, frameHeight: 30 }
+            { frameWidth: 39, frameHeight: 22 }
+        );
+        this.load.spritesheet('babyplayer2',
+            'assets/img/babyplayer2.png',
+            { frameWidth: 22, frameHeight: 39 }
         );
         //ADD SOUNDS
         this.load.audio('startgamesound', '../assets/sounds/startgame.ogg');
@@ -36,7 +43,6 @@ export class FirstPhase extends Phaser.Scene {
     }
 
     create() {
-        //this.add.image(0, 0, 'fondo').setOrigin(0, 0);
 
         this.background = this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'background');
         this.background.setScale(0.2, 0.2);
@@ -47,14 +53,26 @@ export class FirstPhase extends Phaser.Scene {
         this.catchSample = this.sound.add('catchsound');
         this.startGameSample.play();
         //JUGADOR
-        this.player = this.physics.add.sprite(100, 450, 'babyplayer');
+        this.player = this.physics.add.sprite(50, 550, 'babyplayer');
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
+        this.player.flipX = true;
 
         this.anims.create({
-            key: 'move',
-            frames: this.anims.generateFrameNumbers('babyplayer', { start: 0, end: 3 }),
+            key: 'moveHor',
+            frames: this.anims.generateFrameNumbers('babyplayer', { start: 0, end: 1 }),
             frameRate: 7
+        });
+        this.anims.create({
+            key: 'moveVer',
+            frames: this.anims.generateFrameNumbers('babyplayer2', { start: 0, end: 1 }),
+            frameRate: 7
+        });
+        this.anims.create({
+            key: 'moveSpider',
+            frames: this.anims.generateFrameNumbers('spider', { start: 0, end: 1 }),
+            frameRate: 7,
+            repeat: -1
         });
         //TECLAS
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -67,16 +85,13 @@ export class FirstPhase extends Phaser.Scene {
         this.evolutionbar.setFrame(this.scoreEvolution);
 
         //BOMBAS
-
         this.enemies.create();
-
-
-        //DISPAROS
-        this.disparos = this.physics.add.group({
-            key: 'bomb'
-            //maxSize: 100,
-        });
-
+        /*
+                //DISPAROS
+                this.disparos = this.physics.add.group({
+                    key: 'bomb'
+                    //maxSize: 100,
+                });*/
     }
     update() {
         this.movTeclas();
@@ -95,60 +110,41 @@ export class FirstPhase extends Phaser.Scene {
             bullet.setVisible(true);
             bullet.body.setVelocityX(200);
             bullet.body.setVelocityY(-200);
-            //console.log('disparo');
         }
     }
     movTeclas() { //ACCIONES DEL TECLADO
         let playerVelocity = 160;
-        if (this.cursors.up.isDown && this.cursors.right.isDown) {
-            this.player.setVelocityY(-playerVelocity);
-            this.player.setVelocityX(playerVelocity);
-            this.player.anims.play('move', true);
-            this.player.flipX = true; //(Girar la sprite horizontalmente)
-        }
-        if (this.cursors.down.isDown && this.cursors.right.isDown) {
-            this.player.setVelocityY(playerVelocity);
-            this.player.setVelocityX(playerVelocity);
-            this.player.anims.play('move', true);
-            this.player.flipX = true; //(Girar la sprite horizontalmente)
-        }
-        if (this.cursors.up.isDown && this.cursors.left.isDown) {
-            this.player.setVelocityY(-playerVelocity);
+        this.player.setVelocityX(0);
+        this.player.setVelocityY(0);
+        if (this.cursors.left.isDown) {
             this.player.setVelocityX(-playerVelocity);
-            this.player.anims.play('move', true);
+            this.player.anims.play('moveHor', true);
             this.player.flipX = false; //(Girar la sprite horizontalmente)
-        }
-        if (this.cursors.down.isDown && this.cursors.left.isDown) {
-            this.player.setVelocityY(playerVelocity);
-            this.player.setVelocityX(-playerVelocity);
-            this.player.anims.play('move', true);
-            this.player.flipX = false; //(Girar la sprite horizontalmente)
-
-        }
-        else if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-playerVelocity);
-            this.player.anims.play('move', true);
-            this.player.flipX = false; //(Girar la sprite horizontalmente)
+            this.player.flipY = false
         }
         else if (this.cursors.right.isDown) {
             this.player.setVelocityX(playerVelocity);
-            this.player.anims.play('move', true);
+            this.player.anims.play('moveHor', true);
             this.player.flipX = true; //(Girar la sprite horizontalmente)
+            this.player.flipY = false
         }
         else if (this.cursors.up.isDown) {
             this.player.setVelocityY(-playerVelocity);
-            this.player.anims.play('move', true);
+            this.player.anims.play('moveVer', true);
+            this.player.flipY = false;//(Girar la sprite verticalmente)
+            this.player.flipX = false
         }
         else if (this.cursors.down.isDown) {
             this.player.setVelocityY(playerVelocity);
-            this.player.anims.play('move', true);
+            this.player.anims.play('moveVer', true);
+            this.player.flipY = true;
+            this.player.flipX = false
         }
         else {
             this.player.setVelocityX(0);
             this.player.setVelocityY(0);
             this.player.anims.stop();
         }
-
     }
 
     endGame(completed = false) {
@@ -158,6 +154,4 @@ export class FirstPhase extends Phaser.Scene {
             this.scene.start('gamewin');
         }
     }
-
-
 }

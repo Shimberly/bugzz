@@ -1,5 +1,6 @@
 import { LiveCounter } from "../components/livecounter.js";
 import { FoodCounter } from "../components/foodcounter.js";
+import { Enemies } from "../components/enemies.js";
 
 export class FirstPhase extends Phaser.Scene {
     constructor() {
@@ -9,6 +10,7 @@ export class FirstPhase extends Phaser.Scene {
         this.scoreEvolution = 0;
         this.liveCounter = new LiveCounter(this, 3);
         this.foodCounter = new FoodCounter(this);
+        this.enemies = new Enemies(this, 10);
     }
 
     preload() {
@@ -19,6 +21,10 @@ export class FirstPhase extends Phaser.Scene {
         this.load.image('food', 'assets/img/food.png');
         this.load.image('food2', 'assets/img/food2.png');
         //this.load.spritesheet('fullscreen', 'assets/ui/fullscreen.png', { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('evolutionbar',
+            'assets/img/evolution.png',
+            { frameWidth: 150, frameHeight: 25 }
+        );
         this.load.spritesheet('babyplayer',
             'assets/img/babyplayer.png',
             { frameWidth: 75, frameHeight: 30 }
@@ -53,16 +59,17 @@ export class FirstPhase extends Phaser.Scene {
         //TECLAS
         this.cursors = this.input.keyboard.createCursorKeys();
 
-
-
         //TEXTOS
-        this.barraText = this.add.text(16, 16, 'Evolucion: ' + this.scoreEvolution, { fontSize: '32px', fill: '#000' });
-        this.liveCounter.create();
+        this.liveCounter.create(); //CREAR VIDAS
         this.foodCounter.create(); //CREATE FOOD RANDOM
-        //BOMBAS
-        this.bombs = this.physics.add.group();
+        this.evolutionbar = this.physics.add.sprite(10, 5, 'evolutionbar').setOrigin(0, 0);
+        this.evolutionbar.setScale(1.5, 1.5)
+        this.evolutionbar.setFrame(this.scoreEvolution);
 
-        this.physics.add.collider(this.player, this.bombs, this.hitbomb, null, this);
+        //BOMBAS
+
+        this.enemies.create();
+
 
         //DISPAROS
         this.disparos = this.physics.add.group({
@@ -81,17 +88,6 @@ export class FirstPhase extends Phaser.Scene {
         }
     }
 
-
-    hitbomb(player, bomb) {
-        this.lifes--;
-        this.impactSample.play();
-        bomb.disableBody(true, true);
-        let gameNotFinished = this.liveCounter.liveLost();
-        /*if (!gameNotFinished) {
-            //this.setInitialPlatformState();
-        }*/
-
-    }
     disparar(player) {
         let bullet = this.disparos.get(player.x + 17, player.y - 30);
         if (bullet) {

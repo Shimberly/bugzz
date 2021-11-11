@@ -9,13 +9,13 @@ export class LiveCounter {
 
     create() {
         let displacement = 50;
-        let firstPosition = 800 - ((this.initialLives - 1) * displacement);
+        let firstPosition = 800 - ((this.initialLives) * displacement);
         this.liveImages = this.relatedScene.physics.add.staticGroup({
             setScale: { x: 0.4, y: 0.4 },
             key: 'life',
-            frameQuantity: this.initialLives - 1,
+            frameQuantity: this.initialLives,
             gridAlign: {
-                width: this.initialLives - 1,
+                width: this.initialLives,
                 height: 1,
                 cellWidth: displacement,
                 cellHeight: 30,
@@ -25,7 +25,7 @@ export class LiveCounter {
         });
     }
     liveLost() {
-        if (this.liveImages.countActive() == 0) {
+        if (this.liveImages.countActive() == 1) {
             this.relatedScene.endGame();
             return false;
         }

@@ -9,14 +9,14 @@ export class FoodCounter {
         let leafsType = ['food', 'food2'];
         this.scene.foods = this.scene.physics.add.group({
             //repeat: cantFood
+            //collideWorldBounds: true
         });
         for (let index = 0; index < cantFood; index++) {
             let numLeafType = Math.floor(Math.random() * 2);
             let leafPosX = Math.floor(Math.random() * 800);
             let leafPosY = Math.floor(Math.random() * 545) + 50;
             let food = this.scene.foods.create(leafPosX, leafPosY, leafsType[numLeafType]);
-            food.setCollideWorldBounds(true);
-            food.setScale(0.3, 0.3);
+            food.setScale(0.4, 0.4);
         }
 
         this.scene.physics.add.overlap(this.scene.player, this.scene.foods, this.collectFood, null, this);

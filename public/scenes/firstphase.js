@@ -84,7 +84,7 @@ export class FirstPhase extends Phaser.Scene {
         this.evolutionbar.setScale(1.5, 1.5)
         this.evolutionbar.setFrame(this.scoreEvolution);
 
-        //BOMBAS
+        //ENEMIES
         this.enemies.create();
         /*
                 //DISPAROS

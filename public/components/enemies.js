@@ -18,30 +18,30 @@ export class Enemies {
         //this.scene.spiders.anims.play('moveSpider', true);
         this.scene.physics.add.collider(this.scene.player, this.scene.spiders, this.hitEnemy, null, this);
         for (let index = 0; index < this.cantEnemies; index++) {
-            var x = Phaser.Math.Between(300, 790)
-            var y = Phaser.Math.Between(0, 590);
+            var x = Phaser.Math.Between(100, 790)
+            var y = Phaser.Math.Between(0, 500);
             var spider = this.scene.spiders.create(x, y, 'spider');
             spider.anims.play('moveSpider', true);
             let direction = Phaser.Math.Between(0, 3);
+            let speed = Phaser.Math.Between(100, 300);
             switch (direction) {
                 case 0: //UP
-                    //this.setVelocity(0, -speed)
-                    spider.setVelocity(0, -Phaser.Math.Between(100, 300));
+                    spider.setVelocity(0, -speed);
                     break
 
                 case 1: // DOWN:
-                    //this.setVelocity(0, speed)
-                    spider.setVelocity(0, Phaser.Math.Between(100, 300));
+                    spider.setVelocity(0, speed)
+                    spider.flipY = true;
                     break
 
                 case 2: // LEFT
-                    //this.setVelocity(-speed, 0)
-                    spider.setVelocity(-Phaser.Math.Between(100, 300), 0);
+                    spider.setVelocity(-speed, 0);
+                    spider.angle = -90;
                     break
 
                 case 3: //RIGHT
-                    //this.setVelocity(speed, 0)
-                    spider.setVelocity(Phaser.Math.Between(100, 300), 0);
+                    spider.setVelocity(speed, 0);
+                    spider.angle = 90;
                     break
             }
             //spider.setVelocity(Phaser.Math.Between(100, 300), Phaser.Math.Between(100, 300));

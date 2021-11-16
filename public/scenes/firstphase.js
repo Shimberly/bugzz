@@ -36,6 +36,10 @@ export class FirstPhase extends Phaser.Scene {
             'assets/img/babyplayer2.png',
             { frameWidth: 22, frameHeight: 39 }
         );
+        this.load.spritesheet('tunel',
+            'assets/img/tunel.png',
+            { frameWidth: 100, frameHeight: 66 }
+        );
         //ADD SOUNDS
         this.load.audio('startgamesound', '../assets/sounds/startgame.ogg');
         this.load.audio('impactsound', '../assets/sounds/impact.ogg');
@@ -52,7 +56,9 @@ export class FirstPhase extends Phaser.Scene {
         this.impactSample = this.sound.add('impactsound');
         this.catchSample = this.sound.add('catchsound');
         this.startGameSample.play();
-        //JUGADOR
+
+        //JUGADOR Y TUNEL
+
         this.player = this.physics.add.sprite(50, 550, 'babyplayer');
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
@@ -73,6 +79,12 @@ export class FirstPhase extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('spider', { start: 0, end: 1 }),
             frameRate: 7,
             repeat: -1
+        });
+        this.anims.create({
+            key: 'appearTunel',
+            frames: this.anims.generateFrameNumbers('tunel', { start: 2, end: 0 }),
+            frameRate: 7,
+            repeat: 1
         });
         //TECLAS
         this.cursors = this.input.keyboard.createCursorKeys();

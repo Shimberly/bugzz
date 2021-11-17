@@ -41,6 +41,7 @@ export class FirstPhase extends Phaser.Scene {
             'assets/img/tunel.png',
             { frameWidth: 100, frameHeight: 66 }
         );
+
         //ADD SOUNDS
         this.load.audio('startgamesound', '../assets/sounds/startgame.ogg');
         this.load.audio('impactsound', '../assets/sounds/impact.ogg');
@@ -80,6 +81,12 @@ export class FirstPhase extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('spider', { start: 0, end: 1 }),
             frameRate: 7,
             repeat: -1
+        });
+        this.anims.create({
+            key: 'appearTunel',
+            frames: this.anims.generateFrameNumbers('tunel', { start: 2, end: 0 }),
+            frameRate: 7,
+            repeat: 1
         });
         this.anims.create({
             key: 'appearTunel',

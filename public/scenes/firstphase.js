@@ -10,24 +10,24 @@ export class FirstPhase extends Phaser.Scene {
         this.scoreEvolution = 0;
         this.liveCounter = new LiveCounter(this, 3);
         this.foodCounter = new FoodCounter(this);
-        this.enemies = new Enemies(this, 9);
+        this.enemies = new Enemies(this, 4);
     }
 
     preload() {
-        //ADD IMG
         this.load.image('background', 'assets/img/fondo.jpg');
         this.load.image('theme', '../assets/img/theme.jpg');
         this.load.image('life', 'assets/img/life.png');
         this.load.image('food', 'assets/img/food.png');
         this.load.image('food2', 'assets/img/food2.png');
+        this.load.image('spiderweb', 'assets/img/spiderweb.png');
         //this.load.spritesheet('fullscreen', 'assets/ui/fullscreen.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('evolutionbar',
             'assets/img/evolution.png',
             { frameWidth: 150, frameHeight: 25 }
         );
         this.load.spritesheet('spider',
-            'assets/img/spider.png',
-            { frameWidth: 60, frameHeight: 65 }
+            'assets/img/spiderbc.png',
+            { frameWidth: 73, frameHeight: 95 }
         );
         this.load.spritesheet('babyplayer',
             'assets/img/babyplayer.png',
@@ -49,7 +49,6 @@ export class FirstPhase extends Phaser.Scene {
     }
 
     create() {
-
         this.background = this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'background');
         this.background.setScale(0.2, 0.2);
 
@@ -60,7 +59,6 @@ export class FirstPhase extends Phaser.Scene {
         this.startGameSample.play();
 
         //JUGADOR Y TUNEL
-
         this.player = this.physics.add.sprite(50, 550, 'babyplayer');
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
@@ -88,12 +86,6 @@ export class FirstPhase extends Phaser.Scene {
             frameRate: 7,
             repeat: 1
         });
-        this.anims.create({
-            key: 'appearTunel',
-            frames: this.anims.generateFrameNumbers('tunel', { start: 2, end: 0 }),
-            frameRate: 7,
-            repeat: 1
-        });
         //TECLAS
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -112,6 +104,9 @@ export class FirstPhase extends Phaser.Scene {
                     key: 'bomb'
                     //maxSize: 100,
                 });*/
+        this.physics.world.setBoundsCollision(true, true, true, true);
+
+
     }
     update() {
         this.movTeclas();
@@ -121,8 +116,32 @@ export class FirstPhase extends Phaser.Scene {
                 this.disparar(player);
             }
         }
+        /*let currentEnemy = this.player;
+        this.physics.world.on("worldbounds", function (body) {
+            if (body) {
+                console.log(body);
+                if (body.gameObject.texture.key === 'spider') {
+                    if ((config.height - body.position.y) <= body.height) {
+                        body.gameObject.disableBody(true, true);
+                    }
+                }
+            }
+        });*/
+        /*if (!this.physics.world.bounds.contains(currentEnemy.x, currentEnemy.y)) {
+    currentEnemy.destroy()
+}*/
+
+        /*if (Phaser.Geom.Intersects.RectangleToRectangle(currentEnemy.body, this.physics.world.bounds)) {
+            console.log("miau");
+        }*/
     }
 
+    onWorldBounds(body) {
+        var spider = body.gameObject;
+        //var frame = ball.frame.name;
+
+        ball.setFrame(frame);
+    }
     disparar(player) {
         let bullet = this.disparos.get(player.x + 17, player.y - 30);
         if (bullet) {
@@ -133,7 +152,7 @@ export class FirstPhase extends Phaser.Scene {
         }
     }
     movTeclas() { //ACCIONES DEL TECLADO
-        let playerVelocity = 160;
+        let playerVelocity = 190;
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
         if (this.cursors.left.isDown) {

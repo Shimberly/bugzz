@@ -13,8 +13,8 @@ export class Gameover extends Phaser.Scene {
 
     preload() {
         this.restartButton.preload();
-        this.load.audio('gamewinsound', '../assets/sounds/gamewin.ogg');
-        this.load.audio('gameoversound', '../assets/sounds/gameover.ogg');
+        this.load.audio('gamewinsound', '../assets/sounds/gamewin.wav');
+        this.load.audio('gameoversound', '../assets/sounds/gameover.wav');
         this.load.image('txtlose', 'assets/img/txtlose.png');
         this.load.image('txtwin', 'assets/img/txtwin.png');
     }

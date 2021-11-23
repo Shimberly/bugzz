@@ -44,8 +44,11 @@ export class FirstPhase extends Phaser.Scene {
 
         //ADD SOUNDS
         this.load.audio('startgamesound', '../assets/sounds/startgame.ogg');
-        this.load.audio('impactsound', '../assets/sounds/impact.ogg');
-        this.load.audio('catchsound', '../assets/sounds/catch.ogg');
+        //this.load.audio('impactsound', '../assets/sounds/impact.ogg');
+        this.load.audio('impactsound', '../assets/sounds/enemyhit.wav');
+        this.load.audio('foodsound', '../assets/sounds/foodcounter.wav');
+        this.load.audio('lifesound', '../assets/sounds/earnlife.wav');
+        //this.load.audio('catchsound', '../assets/sounds/catch.ogg');
     }
 
     create() {
@@ -54,8 +57,9 @@ export class FirstPhase extends Phaser.Scene {
 
         //SONIDO
         this.startGameSample = this.sound.add('startgamesound');
-        this.impactSample = this.sound.add('impactsound');
-        this.catchSample = this.sound.add('catchsound');
+        this.impactSound = this.sound.add('impactsound');
+        this.foodSound = this.sound.add('foodsound');
+        this.lifeSound = this.sound.add('lifesound');
         this.startGameSample.play();
 
         //JUGADOR Y TUNEL

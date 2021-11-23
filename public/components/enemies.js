@@ -31,14 +31,14 @@ export class Enemies {
     hitEnemy(player, spider) {
         this.flagVelocityEnemyX = spider.body.velocity.x;
         this.flagVelocityEnemyY = spider.body.velocity.y;
-        this.scene.impactSample.play();
+        this.scene.impactSound.play();
         player.setTint(0xff0000);
         this.colliderEnemies.active = false;
         spider.setTint(0xff00ff);
         spider.setVelocity(0, 0);
         spider.setScale(0.4, 0.4);
         spider.anims.stop();
-        this.scene.time.addEvent({ delay: 2000, callback: this.clearPlayer, args: [spider, player], callbackScope: this, loop: false });
+        this.scene.time.addEvent({ delay: 1800, callback: this.clearPlayer, args: [spider, player], callbackScope: this, loop: false });
         //spider.disableBody(true, true);
         let gameNotFinished = this.scene.liveCounter.liveLost();
 

@@ -51,6 +51,7 @@ export class LiveCounter {
     }
     collectHeart(player, heart) {
         this.lifes++;
+        this.scene.lifeSound.play();
         /*if (this.lifes === 2) {
             this.liveImages[1].enableBody(true, this.liveImages[1].x, this.liveImages[1].y, true, true)
         }

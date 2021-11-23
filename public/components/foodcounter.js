@@ -19,7 +19,7 @@ export class FoodCounter {
     }
     collectFood(player, food) {
         food.disableBody(true, true);
-        this.scene.catchSample.play();
+        this.scene.foodSound.play();
         this.scene.scoreEvolution++;
         this.scene.evolutionbar.setFrame(this.scene.scoreEvolution);
         this.scene.enemies.createEnemy();

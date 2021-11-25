@@ -49,7 +49,7 @@ export class RestartButton {
                 repeat: -1
             });
             this.startButton = this.relatedScene.physics.add.sprite(201, 310, 'btnreiniciar').setInteractive({ cursor: 'pointer' });
-
+            this.startButton.body.setSize(this.startButton.width - 20, this.startButton.height - 20, true);
             this.startButton.anims.play('btnreiniciarright', true);
 
         }

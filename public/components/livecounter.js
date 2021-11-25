@@ -33,12 +33,14 @@ export class LiveCounter {
         if (this.lifes === 1) {
             this.scene.endGame();
             return false;
+        } else {
+            let currentLiveLost = this.liveImages.getFirstAlive();
+            this.lastLife = currentLiveLost;
+            currentLiveLost.disableBody(true, true);
+            this.lifes--;
+            return true;
         }
-        let currentLiveLost = this.liveImages.getFirstAlive();
-        this.lastLife = currentLiveLost;
-        currentLiveLost.disableBody(true, true);
-        this.lifes--;
-        return true;
+
     }
     createHearts() {
         if (this.scene.hearts.countActive(true) === 0) {

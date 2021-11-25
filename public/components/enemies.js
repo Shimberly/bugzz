@@ -14,7 +14,7 @@ export class Enemies {
             bounceX: 1,
             bounceY: 1
         });
-        this.colliderEnemies = this.scene.physics.add.collider(this.scene.player, this.scene.spiders, this.hitEnemy, null, this);
+        this.scene.colliderEnemies = this.scene.physics.add.collider(this.scene.player, this.scene.spiders, this.hitEnemy, null, this);
         for (let index = 0; index < this.cantEnemies; index++) {
             this.createEnemy();
         }
@@ -33,7 +33,8 @@ export class Enemies {
         this.flagVelocityEnemyY = spider.body.velocity.y;
         this.scene.impactSound.play();
         player.setTint(0xff0000);
-        this.colliderEnemies.active = false;
+        this.scene.colliderEnemies.active = false;
+        this.scene.overlapFood.active = false;
         spider.setTint(0xff00ff);
         spider.setVelocity(0, 0);
         spider.setScale(0.4, 0.4);
@@ -51,14 +52,26 @@ export class Enemies {
         var x = Phaser.Math.Between(100, 790)
         var y = Phaser.Math.Between(0, 500);
         var spider = this.scene.spiders.create(x, y, 'spider');
+        spider.setDepth(1);
         spider.anims.play('moveSpider', true);
         this.directionEnemy(spider);
         spider.setScale(0.45, 0.45);
+        spider.body.setSize(spider.body.width - 15, spider.body.height - 15, true);
+
+
+    }
+    resetDirectionEnemies() {
+        //let t = this; use this when you use a function declaration, with the arrow function you dont need this **** AMAZING TIP ****
+        this.scene.spiders.children.iterate(spider => {
+            this.directionEnemy(spider);
+
+        });
     }
     clearPlayer(spider, player) { //AFTER SECONDS DO THIS
         player.clearTint();
         //spider.clearTint();
-        this.colliderEnemies.active = true;
+        this.scene.colliderEnemies.active = true;
+        this.scene.overlapFood.active = true;
         this.directionEnemy(spider);
         //spider.setScale(0.5, 0.5);
         //spider.anims.play('moveSpider', true);

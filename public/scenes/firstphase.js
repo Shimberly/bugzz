@@ -20,6 +20,7 @@ export class FirstPhase extends Phaser.Scene {
         this.load.image('food', 'assets/img/food.png');
         this.load.image('food2', 'assets/img/food2.png');
         this.load.image('spiderweb', 'assets/img/spiderweb.png');
+        this.load.image('tunelprb', 'assets/img/tunelprb.png');
         //this.load.spritesheet('fullscreen', 'assets/ui/fullscreen.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('evolutionbar',
             'assets/img/evolution.png',
@@ -39,7 +40,7 @@ export class FirstPhase extends Phaser.Scene {
         );
         this.load.spritesheet('tunel',
             'assets/img/tunel.png',
-            { frameWidth: 100, frameHeight: 66 }
+            { frameWidth: 90, frameHeight: 60 }
         );
 
         //ADD SOUNDS
@@ -67,7 +68,8 @@ export class FirstPhase extends Phaser.Scene {
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
         this.player.flipX = true;
-
+        this.player.setSize(30, 10, true);
+        this.player.setDepth(1);
         this.anims.create({
             key: 'moveHor',
             frames: this.anims.generateFrameNumbers('babyplayer', { start: 0, end: 1 }),
@@ -87,8 +89,8 @@ export class FirstPhase extends Phaser.Scene {
         this.anims.create({
             key: 'appearTunel',
             frames: this.anims.generateFrameNumbers('tunel', { start: 2, end: 0 }),
-            frameRate: 7,
-            repeat: 1
+            frameRate: 4,
+            repeat: -1
         });
         //TECLAS
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -146,6 +148,9 @@ export class FirstPhase extends Phaser.Scene {
 
         ball.setFrame(frame);
     }
+    salir() {
+        console.log('salio')
+    }
     disparar(player) {
         let bullet = this.disparos.get(player.x + 17, player.y - 30);
         if (bullet) {
@@ -163,25 +168,29 @@ export class FirstPhase extends Phaser.Scene {
             this.player.setVelocityX(-playerVelocity);
             this.player.anims.play('moveHor', true);
             this.player.flipX = false; //(Girar la sprite horizontalmente)
-            this.player.flipY = false
+            this.player.flipY = false;
+            this.player.setSize(30, 10, true);
         }
         else if (this.cursors.right.isDown) {
             this.player.setVelocityX(playerVelocity);
             this.player.anims.play('moveHor', true);
             this.player.flipX = true; //(Girar la sprite horizontalmente)
-            this.player.flipY = false
+            this.player.flipY = false;
+            this.player.setSize(30, 10, true);
         }
         else if (this.cursors.up.isDown) {
             this.player.setVelocityY(-playerVelocity);
             this.player.anims.play('moveVer', true);
             this.player.flipY = false;//(Girar la sprite verticalmente)
-            this.player.flipX = false
+            this.player.flipX = false;
+            this.player.setSize(10, 30, true);
         }
         else if (this.cursors.down.isDown) {
             this.player.setVelocityY(playerVelocity);
             this.player.anims.play('moveVer', true);
             this.player.flipY = true;
-            this.player.flipX = false
+            this.player.flipX = false;
+            this.player.setSize(10, 30, true);
         }
         else {
             this.player.setVelocityX(0);

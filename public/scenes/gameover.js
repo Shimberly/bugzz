@@ -26,19 +26,18 @@ export class Gameover extends Phaser.Scene {
         if (this.statusGame) { //WIN GAME
             /*let styleText = { fontSize: 'bold 80px', fill: '#FFF' }; //boundsAlignH: "center", boundsAlignV: "middle"
             this.add.text(this.sys.game.canvas.width / 2 + 20, 190, 'YOU SURVIVE', styleText).setOrigin(0.5);*/
-            let text = this.add.image(this.sys.game.canvas.width / 2 + 20, 200, 'txtwin');
-            text.setScale(0.8, 0.8);
+            this.text = this.add.image(this.sys.game.canvas.width / 2 + 20, 200, 'txtwin');
+            this.gameSound = this.sound.add('gamewinsound');
 
-            this.gameWinSample = this.sound.add('gamewinsound');
-            this.gameWinSample.play();
         } else { //GAME OVER
             //let styleText = { fontSize: 'bold 50px', fill: '#000' };
             //let text = this.add.text(this.sys.game.canvas.width / 2 + 20, 190, 'YOU DID NOT SURVIVE', styleText).setOrigin(0.5);
-            let text = this.add.image(this.sys.game.canvas.width / 2 + 20, 200, 'txtlose');
-            text.setScale(0.8, 0.8);
-            this.gameOverSample = this.sound.add('gameoversound');
-            this.gameOverSample.play();
+            this.text = this.add.image(this.sys.game.canvas.width / 2 + 20, 200, 'txtlose');
+            this.gameSound = this.sound.add('gameoversound');
         }
+        this.text.setScale(0.8, 0.8);
+
+        this.gameSound.play();
     }
     update() {
         this.restartButton.update();

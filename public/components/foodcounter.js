@@ -27,7 +27,7 @@ export class FoodCounter {
         player.setTint(0x00ff00);
         this.scene.colliderEnemies.active = false;
         this.scene.overlapFood.active = false;
-        this.scene.time.addEvent({ delay: 1800, callback: this.clearPlayer, args: [player], callbackScope: this, loop: false });
+        this.scene.time.addEvent({ delay: 1500, callback: this.clearPlayer, args: [player], callbackScope: this, loop: false });
         if (this.scene.scoreEvolution >= this.cantFood) { //TUNEL APPEAR
             let posX = Math.floor(Math.random() * 750) + 30;
             let posY = Math.floor(Math.random() * 520) + 50;

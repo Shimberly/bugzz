@@ -1,7 +1,7 @@
 export class FoodCounter {
     constructor(relatedScene) {
         this.scene = relatedScene;
-        this.cantFood = 11;
+        this.cantFood = 1;
         this.percentage = 100 / 11;
         this.leafsType = ['food', 'food2'];
 

@@ -11,6 +11,7 @@ export class FirstPhase extends Phaser.Scene {
         this.liveCounter = new LiveCounter(this, 3);
         this.foodCounter = new FoodCounter(this);
         this.enemies = new Enemies(this, 4);
+        this.timeGame = 0;
     }
 
     preload() {
@@ -55,6 +56,9 @@ export class FirstPhase extends Phaser.Scene {
         this.background = this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'background');
         this.background.setScale(0.2, 0.2);
 
+        //textotiempo
+        var timeTextStyle = { font: "16px Roboto", fill: '#000' }; // stroke: '#000',strokeThickness: 4 
+        this.txttimegame = this.add.text(this.sys.game.canvas.width - 30, this.sys.game.canvas.height - 18, "", timeTextStyle);
         //SONIDO
         this.startGameSample = this.sound.add('startgamesound');
         this.impactSound = this.sound.add('impactsound');
@@ -113,7 +117,7 @@ export class FirstPhase extends Phaser.Scene {
 
 
     }
-    update() {
+    update(time) {
         this.movTeclas();
         this.input.keyboard.onUpCallback = function (key) {
             if (key.keyCode === Phaser.KeyCode.G) {
@@ -121,6 +125,8 @@ export class FirstPhase extends Phaser.Scene {
                 this.disparar(player);
             }
         }
+        this.timeGame = time * 0.001;
+        this.txttimegame.setText(Math.round(this.timeGame));
         /*let currentEnemy = this.player;
         this.physics.world.on("worldbounds", function (body) {
             if (body) {
@@ -160,7 +166,7 @@ export class FirstPhase extends Phaser.Scene {
         }
     }
     movTeclas() { //ACCIONES DEL TECLADO
-        let playerVelocity = 190;
+        let playerVelocity = 180;
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
         if (this.cursors.left.isDown) {
@@ -200,9 +206,9 @@ export class FirstPhase extends Phaser.Scene {
 
     endGame(completed = false) {
         if (!completed) {
-            this.scene.start('gameover', { statusGame: 2 });
+            this.scene.start('gameover', { statusGame: 2, timeGame: this.timeGame });
         } else {
-            this.scene.start('gameover', { statusGame: 1 });
+            this.scene.start('gameover', { statusGame: 1, timeGame: this.timeGame });
         }
     }
 }

@@ -88,7 +88,7 @@ export class Enemies {
 
     directionEnemy(spider) {
         let direction = Phaser.Math.Between(0, 7);
-        let speed = Phaser.Math.Between(100, 280);
+        let speed = Phaser.Math.Between(200, 300);
 
         switch (direction) {
             case 0: //UP

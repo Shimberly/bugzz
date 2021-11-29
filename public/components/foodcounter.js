@@ -32,7 +32,7 @@ export class FoodCounter {
             let posX = Math.floor(Math.random() * 750) + 30;
             let posY = Math.floor(Math.random() * 520) + 50;
             this.scene.tunel = this.scene.physics.add.sprite(posX, posY, 'tunel');
-            this.scene.tunel.setScale(0.8, 0.8);
+            this.scene.tunel.setScale(0.7, 0.7);
             this.scene.tunel.body.setSize(30, 33, true);
             this.scene.tunel.anims.play('appearTunel', true);
             this.scene.physics.add.overlap(this.scene.player, this.scene.tunel, this.end, null, this);

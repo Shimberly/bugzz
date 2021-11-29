@@ -34,7 +34,7 @@ export class Gameover extends Phaser.Scene {
                 this.text = this.add.image(this.sys.game.canvas.width / 2, 370, 'txtwin');
                 this.gameSound = this.sound.add('gamewinsound');
                 this.gameSound.play();
-                this.txtGame = this.add.text(this.sys.game.canvas.width / 2, 420, `Your time was ${Math.round(this.timeGame)} seconds`, styleText).setOrigin(0.5);
+                this.txtGame = this.add.text(this.sys.game.canvas.width / 2, 420, `Your time was ${this.formatTime(this.timeGame)}`, styleText).setOrigin(0.5);
                 break;
             case 2: //LOSE
                 //let styleText = { fontSize: 'bold 50px', fill: '#000' };
@@ -52,5 +52,15 @@ export class Gameover extends Phaser.Scene {
     }
     update() {
         this.restartButton.update();
+    }
+    formatTime(seconds) {
+        // Minutes
+        var minutes = Math.floor(seconds / 60);
+        // Seconds
+        var partInSeconds = seconds % 60;
+        // Adds left zeros to seconds
+        partInSeconds = partInSeconds.toString().padStart(2, '0');
+        // Returns formated time
+        return `${minutes}:${partInSeconds}`;
     }
 }

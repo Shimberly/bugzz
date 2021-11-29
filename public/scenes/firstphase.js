@@ -11,7 +11,7 @@ export class FirstPhase extends Phaser.Scene {
         this.liveCounter = new LiveCounter(this, 3);
         this.foodCounter = new FoodCounter(this);
         this.enemies = new Enemies(this, 4);
-        this.timeGame = 0;
+
     }
 
     preload() {
@@ -57,8 +57,10 @@ export class FirstPhase extends Phaser.Scene {
         this.background.setScale(0.2, 0.2);
 
         //textotiempo
+        this.timeGame = 0;
         var timeTextStyle = { font: "16px Roboto", fill: '#000' }; // stroke: '#000',strokeThickness: 4 
-        this.txttimegame = this.add.text(this.sys.game.canvas.width - 30, this.sys.game.canvas.height - 18, "", timeTextStyle);
+        this.txttimegame = this.add.text(this.sys.game.canvas.width - 30, this.sys.game.canvas.height - 18, this.formatTime(this.timeGame), timeTextStyle);
+        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.conteo, callbackScope: this, loop: true });
         //SONIDO
         this.startGameSample = this.sound.add('startgamesound');
         this.impactSound = this.sound.add('impactsound');
@@ -125,8 +127,8 @@ export class FirstPhase extends Phaser.Scene {
                 this.disparar(player);
             }
         }
-        this.timeGame = time * 0.001;
-        this.txttimegame.setText(Math.round(this.timeGame));
+        //this.timeGame = time * 0.001;
+        //this.txttimegame.setText(Math.round(this.timeGame));
         /*let currentEnemy = this.player;
         this.physics.world.on("worldbounds", function (body) {
             if (body) {
@@ -211,4 +213,19 @@ export class FirstPhase extends Phaser.Scene {
             this.scene.start('gameover', { statusGame: 1, timeGame: this.timeGame });
         }
     }
+    conteo() {
+        this.timeGame += 1;
+        this.txttimegame.setText(this.formatTime(this.timeGame));
+    }
+    formatTime(seconds) {
+        // Minutes
+        var minutes = Math.floor(seconds / 60);
+        // Seconds
+        var partInSeconds = seconds % 60;
+        // Adds left zeros to seconds
+        partInSeconds = partInSeconds.toString().padStart(2, '0');
+        // Returns formated time
+        return `${minutes}:${partInSeconds}`;
+    }
+
 }

@@ -10,12 +10,14 @@ export class Gameover extends Phaser.Scene {
         this.statusGame = data.statusGame;
         this.restartButton = new RestartButton(this, this.statusGame);
         this.timeGame = data.timeGame;
+        this.gameBackgroundSound;
     }
 
     preload() {
         this.restartButton.preload();
         this.load.audio('gamewinsound', '../assets/sounds/gamewin.wav');
         this.load.audio('gameoversound', '../assets/sounds/gameover.wav');
+        this.load.audio('backgroundmusic3', '../assets/sounds/backgroundmusic3.mp3');
         this.load.image('theme', '../assets/img/inicio.jpg');
         this.load.image('txtlose', 'assets/img/txtlose.png');
         this.load.image('txtwin', 'assets/img/txtwin.png');
@@ -23,7 +25,9 @@ export class Gameover extends Phaser.Scene {
     }
 
     create() {
-
+        this.gameBackgroundSound = this.sound.add('backgroundmusic3');
+        this.gameBackgroundSound.loop = true;
+        this.gameBackgroundSound.play();
         this.add.image(this.sys.game.canvas.width / 2, this.sys.game.canvas.height / 2, 'theme');
         this.restartButton.create();
         switch (this.statusGame) {

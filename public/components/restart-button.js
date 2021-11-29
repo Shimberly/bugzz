@@ -84,6 +84,7 @@ export class RestartButton {
 
         });
         this.startButton.on('pointerdown', () => {
+            this.relatedScene.gameBackgroundSound.stop();
             this.relatedScene.scene.start('firstphase');
         });
 

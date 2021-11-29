@@ -49,7 +49,7 @@ export class FirstPhase extends Phaser.Scene {
         this.load.audio('impactsound', '../assets/sounds/enemyhit.wav');
         this.load.audio('foodsound', '../assets/sounds/foodcounter.wav');
         this.load.audio('lifesound', '../assets/sounds/earnlife.wav');
-        //this.load.audio('catchsound', '../assets/sounds/catch.ogg');
+        this.load.audio('backgroundsound', '../assets/sounds/backgroundmusic.mp3');
     }
 
     create() {
@@ -62,11 +62,14 @@ export class FirstPhase extends Phaser.Scene {
         this.txttimegame = this.add.text(this.sys.game.canvas.width - 30, this.sys.game.canvas.height - 18, this.formatTime(this.timeGame), timeTextStyle);
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.conteo, callbackScope: this, loop: true });
         //SONIDO
-        this.startGameSample = this.sound.add('startgamesound');
+        this.startGameSound = this.sound.add('startgamesound');
+        this.backgroundSound = this.sound.add('backgroundsound');
         this.impactSound = this.sound.add('impactsound');
         this.foodSound = this.sound.add('foodsound');
         this.lifeSound = this.sound.add('lifesound');
-        this.startGameSample.play();
+        this.startGameSound.play();
+        this.backgroundSound.loop = true;
+        this.backgroundSound.play();
 
         //JUGADOR Y TUNEL
         this.player = this.physics.add.sprite(50, 550, 'babyplayer');
@@ -207,6 +210,7 @@ export class FirstPhase extends Phaser.Scene {
     }
 
     endGame(completed = false) {
+        this.backgroundSound.stop();
         if (!completed) {
             this.scene.start('gameover', { statusGame: 2, timeGame: this.timeGame });
         } else {

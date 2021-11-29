@@ -9,15 +9,15 @@ export class RestartButton {
     // otros métodos de la clase
     preload() {
         this.relatedScene.load.spritesheet('btnreiniciar',
-            'assets/img/btnreiniciar.png',
+            'public/assets/img/btnreiniciar.png',
             { frameWidth: 200, frameHeight: 118 }
         );
         this.relatedScene.load.spritesheet('btnwin',
-            'assets/img/btnwin.png',
+            'public/assets/img/btnwin.png',
             { frameWidth: 268, frameHeight: 75 }
         );
         this.relatedScene.load.spritesheet('btnstart',
-            'assets/img/btnstart.png',
+            'public/assets/img/btnstart.png',
             { frameWidth: 268, frameHeight: 75 }
         );
     }

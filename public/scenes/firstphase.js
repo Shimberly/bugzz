@@ -15,41 +15,41 @@ export class FirstPhase extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background', 'assets/img/fondo.jpg');
-        this.load.image('life', 'assets/img/life.png');
-        this.load.image('food', 'assets/img/food.png');
-        this.load.image('food2', 'assets/img/food2.png');
-        this.load.image('spiderweb', 'assets/img/spiderweb.png');
-        this.load.image('tunelprb', 'assets/img/tunelprb.png');
+        this.load.image('background', 'public/assets/img/fondo.jpg');
+        this.load.image('life', 'public/assets/img/life.png');
+        this.load.image('food', 'public/assets/img/food.png');
+        this.load.image('food2', 'public/assets/img/food2.png');
+        this.load.image('spiderweb', 'public/assets/img/spiderweb.png');
+        this.load.image('tunelprb', 'public/assets/img/tunelprb.png');
         //this.load.spritesheet('fullscreen', 'assets/ui/fullscreen.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('evolutionbar',
-            'assets/img/evolution.png',
+            'public/assets/img/evolution.png',
             { frameWidth: 150, frameHeight: 25 }
         );
         this.load.spritesheet('spider',
-            'assets/img/spiderbc.png',
+            'public/assets/img/spiderbc.png',
             { frameWidth: 73, frameHeight: 95 }
         );
         this.load.spritesheet('babyplayer',
-            'assets/img/babyplayer.png',
+            'public/assets/img/babyplayer.png',
             { frameWidth: 39, frameHeight: 22 }
         );
         this.load.spritesheet('babyplayer2',
-            'assets/img/babyplayer2.png',
+            'public/assets/img/babyplayer2.png',
             { frameWidth: 22, frameHeight: 39 }
         );
         this.load.spritesheet('tunel',
-            'assets/img/tunel.png',
+            'public/assets/img/tunel.png',
             { frameWidth: 90, frameHeight: 60 }
         );
 
         //ADD SOUNDS
-        this.load.audio('startgamesound', '../assets/sounds/startgame.ogg');
-        //this.load.audio('impactsound', '../assets/sounds/impact.ogg');
-        this.load.audio('impactsound', '../assets/sounds/enemyhit.wav');
-        this.load.audio('foodsound', '../assets/sounds/foodcounter.wav');
-        this.load.audio('lifesound', '../assets/sounds/earnlife.wav');
-        this.load.audio('backgroundsound', '../assets/sounds/backgroundmusic.mp3');
+        this.load.audio('startgamesound', 'public//assets/sounds/startgame.ogg');
+        //this.load.audio('impactsound', 'public//assets/sounds/impact.ogg');
+        this.load.audio('impactsound', 'public//assets/sounds/enemyhit.wav');
+        this.load.audio('foodsound', 'public//assets/sounds/foodcounter.wav');
+        this.load.audio('lifesound', 'public/./assets/sounds/earnlife.wav');
+        this.load.audio('backgroundsound', 'public//assets/sounds/backgroundmusic.mp3');
     }
 
     create() {

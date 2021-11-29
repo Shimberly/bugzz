@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta author="Kimberly Muñoz Cepeda">
-    <title>Buggzz</title>
+    <title>SABERTOOTH - The survivor</title>
+    <link rel="icon" href="./assets/img/logo.png">
 
     <style type="text/css">
         body {
@@ -37,11 +38,14 @@
                 default: 'arcade',
                 arcade: {
                     fps: 60,
-                    gravity: { y: 0 }, //300
-                    debug: false
+                    gravity: { y: 0 } //300
+                    /*debug: true,
+                    debugShowBody: true,
+                    debugShowStaticBody: true,
+                    debugShowVelocity: true*/
                 }
             },
-            scene: [FirstPhase, SecondPhase, Boss, Gameover]
+            scene: [Gameover, FirstPhase]
         };
 
         let game = new Phaser.Game(config);

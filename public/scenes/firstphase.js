@@ -15,7 +15,6 @@ export class FirstPhase extends Phaser.Scene {
 
     preload() {
         this.load.image('background', 'assets/img/fondo.jpg');
-        this.load.image('theme', '../assets/img/theme.jpg');
         this.load.image('life', 'assets/img/life.png');
         this.load.image('food', 'assets/img/food.png');
         this.load.image('food2', 'assets/img/food2.png');
@@ -201,9 +200,9 @@ export class FirstPhase extends Phaser.Scene {
 
     endGame(completed = false) {
         if (!completed) {
-            this.scene.start('gameover', { statusGame: false });
+            this.scene.start('gameover', { statusGame: 2 });
         } else {
-            this.scene.start('gameover', { statusGame: true });
+            this.scene.start('gameover', { statusGame: 1 });
         }
     }
 }

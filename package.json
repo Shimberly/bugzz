@@ -1,7 +1,7 @@
 {
   "name": "bugzz",
   "version": "1.0.0",
-  "description": "Prototype idea of a Videogame made in Phaser for the Game Off 2021 for itch.io",
+  "description": "SABERTOOTH - The survivor / Prototype idea of a Videogame made in Phaser for the Game Off 2021 for itch.io",
   "main": "server.js",
   "type": "module",
   "scripts": {

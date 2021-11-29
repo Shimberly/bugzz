@@ -30,7 +30,7 @@ export class LiveCounter {
         this.scene.physics.add.overlap(this.scene.player, this.scene.hearts, this.collectHeart, null, this);
     }
     liveLost() {
-        if (this.lifes === 0) {
+        if (this.lifes === 1) {
             this.scene.endGame();
             return false;
         } else {

@@ -39,7 +39,7 @@ export class Enemies {
         spider.setVelocity(0, 0);
         spider.setScale(0.4, 0.4);
         spider.anims.stop();
-        this.scene.time.addEvent({ delay: 1500, callback: this.clearPlayer, args: [spider, player], callbackScope: this, loop: false });
+        this.scene.time.addEvent({ delay: 1000, callback: this.clearPlayer, args: [spider, player], callbackScope: this, loop: false });
         //spider.disableBody(true, true);
         let gameNotFinished = this.scene.liveCounter.liveLost();
 

@@ -27,7 +27,7 @@ export class FoodCounter {
         player.setTint(0x00ff00);
         this.scene.colliderEnemies.active = false;
         this.scene.overlapFood.active = false;
-        this.scene.time.addEvent({ delay: 1500, callback: this.clearPlayer, args: [player], callbackScope: this, loop: false });
+        this.scene.time.addEvent({ delay: 1000, callback: this.clearPlayer, args: [player], callbackScope: this, loop: false });
         if (this.scene.scoreEvolution >= this.cantFood) { //TUNEL APPEAR
             let posX = Math.floor(Math.random() * 750) + 30;
             let posY = Math.floor(Math.random() * 520) + 50;
@@ -53,7 +53,7 @@ export class FoodCounter {
         this.scene.endGame(true)
     }
     createLeaves() {
-        let rndFood = 0;
+        /*let rndFood = 0;
         if (this.scene.scoreEvolution > this.cantFood - 2) {
             rndFood = 1;
         } else {
@@ -61,11 +61,13 @@ export class FoodCounter {
         }
 
         for (let index = 0; index < rndFood; index++) {
-            let numLeafType = Math.floor(Math.random() * 2);
-            let leafPosX = Math.floor(Math.random() * 780) + 10;
-            let leafPosY = Math.floor(Math.random() * 545) + 50;
-            let food = this.scene.foods.create(leafPosX, leafPosY, this.leafsType[numLeafType]);
-            food.setScale(0.4, 0.4);
-        }
+            }
+            */
+        let numLeafType = Math.floor(Math.random() * 2);
+        let leafPosX = Math.floor(Math.random() * 780) + 10;
+        let leafPosY = Math.floor(Math.random() * 545) + 50;
+        let food = this.scene.foods.create(leafPosX, leafPosY, this.leafsType[numLeafType]);
+        food.setScale(0.4, 0.4);
+
     }
 }

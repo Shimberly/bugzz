@@ -22,8 +22,10 @@ Itch.io: https://shimberly.itch.io/sabertooth
 
 <b>CREDITS:</b>
 
-Developer of all the game - Kimberly Muñoz
+Game Developer - Kimberly Muñoz
+
 Game idea and tester - Miguel Vásquez
+
 Biology advisor - Karen Muñoz
 
 ** You can read more information about the game and its credits in the Wiki section. **
